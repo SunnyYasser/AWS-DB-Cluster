@@ -1,0 +1,11 @@
+1) Parse aws_credentials.txt file to get the aws_secret_access_key, aws_secret_token, aws_access_id
+2) Setup VPC, subnets, Security groups
+=====
+3) Setup key_pair
+=====
+3) Launch 4 instances each in one cluster, total 2 clusters
+4) Wait till all instances are running
+5) Copy correct FastAPI app to each instance in correct cluster
+6) Launch one more instance with public subnet
+7) Copy ELB to instance above
+8) Test

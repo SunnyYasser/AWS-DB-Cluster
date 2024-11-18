@@ -1,0 +1,42 @@
+{
+    "container1": {
+        "ip": "ec2-100-27-212-14.compute-1.amazonaws.com",
+        "port": "5001",
+        "status": "free"
+    },
+    "container2": {
+        "ip": "ec2-54-144-218-40.compute-1.amazonaws.com",
+        "port": "5001",
+        "status": "free"
+    },
+    "container3": {
+        "ip": "ec2-52-91-220-179.compute-1.amazonaws.com",
+        "port": "5001",
+        "status": "free"
+    },
+    "container4": {
+        "ip": "ec2-100-27-230-229.compute-1.amazonaws.com",
+        "port": "5001",
+        "status": "free"
+    },
+    "container5": {
+        "ip": "ec2-100-27-212-14.compute-1.amazonaws.com",
+        "port": "5002",
+        "status": "free"
+    },
+    "container6": {
+        "ip": "ec2-54-144-218-40.compute-1.amazonaws.com",
+        "port": "5002",
+        "status": "free"
+    },
+    "container7": {
+        "ip": "ec2-52-91-220-179.compute-1.amazonaws.com",
+        "port": "5002",
+        "status": "free"
+    },
+    "container8": {
+        "ip": "ec2-100-27-230-229.compute-1.amazonaws.com",
+        "port": "5002",
+        "status": "free"
+    }
+}

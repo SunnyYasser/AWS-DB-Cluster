@@ -1,0 +1,20 @@
+[
+    {
+        "Name": "mysql_read_node_1",
+        "InstanceID": "i-06186a1e10ebc17c0",
+        "PublicDNS": "ec2-3-92-175-183.compute-1.amazonaws.com",
+        "PublicIP": "3.92.175.183"
+    },
+    {
+        "Name": "mysql_read_node_2",
+        "InstanceID": "i-0571f593d8bad5d76",
+        "PublicDNS": "ec2-54-211-134-81.compute-1.amazonaws.com",
+        "PublicIP": "54.211.134.81"
+    },
+    {
+        "Name": "mysql_write_node",
+        "InstanceID": "i-0ecabfe90bfd6b7c7",
+        "PublicDNS": "ec2-3-87-187-157.compute-1.amazonaws.com",
+        "PublicIP": "3.87.187.157"
+    }
+]
