@@ -1,2 +1,4 @@
 tags
 lab3/*
+*/__pycache__/
+*.pem

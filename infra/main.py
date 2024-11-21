@@ -1,6 +1,6 @@
 from aws_setup import create_vpc_and_subnet, create_security_groups
 from ec2_manager import create_instances, wait_for_instances
-from app_deployment import deploy_orchestrator_app, deploy_worker_apps
+from app_deployment import deploy_master_app, deploy_slave_apps
 from create_keypair import create_keypair
 from capture_aws_credentials2 import get_aws_credentials
 import requests
@@ -92,6 +92,8 @@ def main():
     save_json (instance_data, "instance_details.json")
     print("Instance details saved to instance_details.json")
     
+    deploy_master_app ()
+    deploy_slave_apps ()
 
 if __name__ == "__main__":
     main()
