@@ -18,8 +18,14 @@ def upload_directory(ssh_client, local_directory):
     elif local_directory == "slave":
         local_directory = "../mysql/slave"
     
-    else:
+    elif local_directory == "proxy_manager":
         local_directory = "../mysql/proxy_manager"
+
+    elif local_directory == "trusted_host":
+        local_directory = "../mysql/trusted_host"
+
+    else:
+        local_directory = "../mysql/gatekeeper"
 
     local_absolute_path = os.path.abspath(local_directory)
     
@@ -47,7 +53,7 @@ def setup_non_db_deployment (path, app_name, public_ip, instance_id):
     install_commands = [
         'sudo apt-get update',
         'sudo apt install python3 python3-pip -y',
-        'sudo pip3 install flask gunicorn requests boto3 psutil ec2-metadata'
+        'sudo pip3 install flask gunicorn requests boto3'
     ]
 
     try:
@@ -87,7 +93,7 @@ def setup_deployment (path, app_name, public_ip, instance_id):
     install_commands = [
         'sudo apt-get update',
         'sudo apt install python3 python3-pip -y',
-        'sudo pip3 install flask gunicorn requests boto3 psutil ec2-metadata',
+        'sudo pip3 install flask gunicorn requests boto3',
         'sudo pip3 install mysql-connector-python'
     ]
 
@@ -159,8 +165,6 @@ def deploy_master_app ():
             instance_ids.append(instance['InstanceID'])
             public_ips.append(instance['PublicIP'])
 
-    set_credentials ("../mysql/master/master_app.py");
-    
     setup_deployment ("master", "master_app.py", public_ips[0], instance_ids[0])
 
 def deploy_slave_apps ():
@@ -175,18 +179,25 @@ def deploy_slave_apps ():
             instance_ids.append(instance['InstanceID'])
             public_ips.append(instance['PublicIP'])
 
-
-    print(instance_ids)
-    print(public_ips)
-    
-    set_credentials ("../mysql/slave/slave_app.py");
-
     for i, ip in enumerate (public_ips):
         setup_deployment ("slave", "slave_app.py", ip, instance_ids[i])
 
 def deploy_proxy_manager_app ():
     #Specify the instance IDs
-    with open('proxy_manager_details.json', 'r') as file:
+    with open('../mysql/trusted_host/proxy_manager_details.json', 'r') as file:
+         instance_details = json.load(file)
+    
+    instance_ids = []
+    public_ips = []
+    for instance in instance_details:
+        instance_ids.append(instance['InstanceID'])
+        public_ips.append(instance['PublicIP'])
+    
+    setup_non_db_deployment ("proxy_manager", "proxy_manager_app.py", public_ips[0], instance_ids[0])
+
+def deploy_trusted_host_app ():
+    #Specify the instance IDs
+    with open('../mysql/gatekeeper/trusted_host_details.json', 'r') as file:
          instance_details = json.load(file)
     
     instance_ids = []
@@ -195,8 +206,17 @@ def deploy_proxy_manager_app ():
         instance_ids.append(instance['InstanceID'])
         public_ips.append(instance['PublicIP'])
 
+    setup_non_db_deployment ("trusted_host", "trusted_host_app.py", public_ips[0], instance_ids[0])
 
-    set_credentials ("../mysql/proxy_manager/proxy_manager_app.py");
+def deploy_gatekeeper_app ():
+    #Specify the instance IDs
+    with open('../client/gatekeeper_details.json', 'r') as file:
+         instance_details = json.load(file)
     
-    setup_non_db_deployment ("proxy_manager", "proxy_manager_app.py", public_ips[0], instance_ids[0])
+    instance_ids = []
+    public_ips = []
+    for instance in instance_details:
+        instance_ids.append(instance['InstanceID'])
+        public_ips.append(instance['PublicIP'])
 
+    setup_non_db_deployment ("gatekeeper", "gatekeeper_app.py", public_ips[0], instance_ids[0])

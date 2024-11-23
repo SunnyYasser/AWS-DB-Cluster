@@ -1,0 +1,8 @@
+[
+    {
+        "Name": "trusted_host_node",
+        "InstanceID": "i-01f719d6ad7269b8c",
+        "PublicDNS": "ec2-98-80-68-221.compute-1.amazonaws.com",
+        "PublicIP": "98.80.68.221"
+    }
+]

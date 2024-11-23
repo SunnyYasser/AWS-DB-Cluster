@@ -96,7 +96,7 @@ def write_data():
             url = f"http://{ip}:80/write"
             print ("Write replay URL: ", url)
             response = requests.post(url, json={"query": query})
-            if response.status_code == 201:
+            if response.status_code == 200:
                 json_response = response.json()
                 responses.append({
                     "message": json_response.get("message", "No message provided"),

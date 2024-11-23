@@ -1,6 +1,6 @@
 from aws_setup import create_vpc_and_subnet, create_security_groups
 from ec2_manager import create_instances, wait_for_instances
-from app_deployment import deploy_master_app, deploy_slave_apps, deploy_proxy_manager_app
+from app_deployment import deploy_master_app, deploy_slave_apps, deploy_proxy_manager_app, deploy_gatekeeper_app, deploy_trusted_host_app
 from create_keypair import create_keypair
 from capture_aws_credentials2 import get_aws_credentials
 import requests
@@ -44,7 +44,6 @@ def get_public_ip (ec2_client, instance_id):
         return None
 
 
-
 def main():
     ec2 = boto3.resource('ec2', region_name='us-east-1')
     ec2_client = boto3.client('ec2', region_name='us-east-1')
@@ -62,11 +61,15 @@ def main():
     # Launch EC2 instances
     mysql_instances = create_instances(ec2, constants.MYSQL_NODE_TYPE, constants.MYSQL_NODE_COUNT, subnet, mysql_sg, 'MySQLNodes', keypair)
     proxy_mgr_instance = create_instances(ec2, constants.PROXY_MANAGER_NODE_TYPE, constants.PROXY_MANAGER_NODE_COUNT, subnet, mysql_sg, 'ProxyManagerNode', keypair)
+    gatekeeper_instance = create_instances(ec2, constants.GATEKEEPER_NODE_TYPE, constants.GATEKEEPER_NODE_COUNT, subnet, mysql_sg, 'GateKeeperNode', keypair)
+    trusted_host_instance = create_instances(ec2, constants.TRUSTED_HOST_NODE_TYPE, constants.TRUSTED_HOST_NODE_COUNT, subnet, mysql_sg, 'TrustedHostNode', keypair)
     
     time.sleep(60)
 
     instance_data = []
     proxy_mgr_data = []
+    gatekeeper_data = []
+    trusted_host_data = []
  
     for i, instance in enumerate(mysql_instances, start=1):
         instance.wait_until_running()
@@ -105,15 +108,52 @@ def main():
 
         proxy_mgr_data.append(instance_info)
     
+    for i, instance in enumerate(gatekeeper_instance, start=1):
+        instance.wait_until_running()
+        instance.load()
+        
+        instance_name = f'gatekeeper_node'
+
+        instance.create_tags(Tags=[{'Key': 'Name', 'Value': instance_name}])
+ 
+        instance_info = {
+            'Name': instance_name,
+            'InstanceID': instance.id,
+            'PublicDNS': instance.public_dns_name,
+            'PublicIP': instance.public_ip_address
+        }
+
+        gatekeeper_data.append(instance_info)
+    
+    for i, instance in enumerate(trusted_host_instance, start=1):
+        instance.wait_until_running()
+        instance.load()
+        
+        instance_name = f'trusted_host_node'
+
+        instance.create_tags(Tags=[{'Key': 'Name', 'Value': instance_name}])
+ 
+        instance_info = {
+            'Name': instance_name,
+            'InstanceID': instance.id,
+            'PublicDNS': instance.public_dns_name,
+            'PublicIP': instance.public_ip_address
+        }
+
+        trusted_host_data.append(instance_info)
     
     save_json (instance_data, "../mysql/master/instance_details.json")
     save_json (instance_data, "../mysql/proxy_manager/instance_details.json")
-    save_json (proxy_mgr_data, "proxy_manager_details.json")
+    save_json (proxy_mgr_data, "../mysql/trusted_host/proxy_manager_details.json")
+    save_json (trusted_host_data, "../mysql/gatekeeper/trusted_host_details.json")
+    save_json (gatekeeper_data, "../client/gatekeeper_details.json")
     print("Instance details saved to json files")
     
     deploy_master_app ()
     deploy_slave_apps ()
     deploy_proxy_manager_app ()
+    deploy_gatekeeper_app ()
+    deploy_trusted_host_app ()
 
 if __name__ == "__main__":
     main()

@@ -2,7 +2,7 @@ import requests
 import json
 
 # Flask App URL
-BASE_URL = "http://54.161.73.217:80"
+BASE_URL = "http://53.222.245.14:80"
 
 # Health Check Request
 def health_check():
