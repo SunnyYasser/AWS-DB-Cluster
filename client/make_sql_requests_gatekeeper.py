@@ -1,7 +1,7 @@
 import requests
 
 # Base URL of the Flask app
-BASE_URL = "http://98.80.68.221:80/health/process"
+BASE_URL = "http://18.232.155.197:80/process"
 
 # Authentication credentials
 USERNAME = "sysbench_user"
@@ -9,7 +9,7 @@ PASSWORD = "sysbench_password"
 
 # Example queries for the Sakila database
 QUERIES = {
-    "SELECT": "SELECT * FROM actor LIMIT 5;",
+    "SELECT": "SELECT * FROM actor;",
     "INSERT": "INSERT INTO actor (first_name, last_name, last_update) VALUES ('John', 'Doe', NOW());",
     "UPDATE": "UPDATE actor SET last_name = 'Smith' WHERE first_name = 'John';"
 }
@@ -35,12 +35,14 @@ def make_request(query, mode):
 
 
 if __name__ == "__main__":
-    # Example: Run a SELECT query in DIRECT mode
-    make_request(QUERIES["SELECT"], "DIRECT")
+    # Example: Run a SELECT query in RANDOM mode
+    make_request(QUERIES["SELECT"], "RANDOM")
 
-    # Example: Run an INSERT query in RANDOM mode
-    make_request(QUERIES["INSERT"], "RANDOM")
+    # Example: Run an INSERT query in DIRECT mode
+    make_request(QUERIES["INSERT"], "DIRECT")
 
-    # Example: Run an UPDATE query in CUSTOMIZED mode
-    make_request(QUERIES["UPDATE"], "CUSTOMIZED")
+    # Example: Run an UPDATE query in DIRECT mode
+    make_request(QUERIES["UPDATE"], "DIRECT")
 
+    # Example: Run a SELECT query in CUSTOMIZED mode
+    make_request(QUERIES["SELECT"], "CUSTOMIZED")

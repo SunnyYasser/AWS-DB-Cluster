@@ -35,9 +35,6 @@ def read_data():
     
     print ("Read query :", query)
 
-    if not query:
-        return jsonify({"error": "Query string is required"}), 400
-
     try:
         connection = mysql.connector.connect(**DB_CONFIG)
         cursor = connection.cursor(dictionary=True)

@@ -2,7 +2,7 @@ import requests
 import json
 
 # Flask App URL
-BASE_URL = "http://53.222.245.14:80"
+BASE_URL = "http://3.87.87.79:80"
 
 # Health Check Request
 def health_check():
@@ -29,9 +29,11 @@ if __name__ == "__main__":
     # Perform health check
     health_check()
 
-    read_query = "SELECT * FROM actor LIMIT 5;"
+    read_query = "SELECT * FROM actor;"
     write_query = "INSERT INTO actor (first_name, last_name, last_update) VALUES ('Bruce', 'Wayne', NOW());"
+    write_query2 = "DELETE FROM actor WHERE first_name = 'Bruce';"
     
     process_query(write_query)
     process_query(read_query)
-
+    process_query(write_query2)
+    process_query(read_query)

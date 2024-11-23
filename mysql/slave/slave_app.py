@@ -29,9 +29,6 @@ def read_data():
     data = request.json
     query = data.get("query")
 
-    if not query:
-        return jsonify({"error": "Query string is required"}), 400
-
     try:
         connection = mysql.connector.connect(**DB_CONFIG)
         cursor = connection.cursor(dictionary=True)
@@ -47,9 +44,6 @@ def read_data():
 def write_data():
     data = request.json
     query = data.get("query")
-
-    if not query:
-        return jsonify({"error": "Query string is required"}), 400
 
     try:
         connection = mysql.connector.connect(**DB_CONFIG)
