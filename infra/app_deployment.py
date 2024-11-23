@@ -80,8 +80,13 @@ def setup_non_db_deployment (path, app_name, public_ip, instance_id):
         upload_directory (ssh, path)
         print(f"Completed uploading files for {public_ip} in {path}...")
         
-        stdin, stdout, stderr = ssh.exec_command (f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level info &")
+        app_deploy_cmd = f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level info &"
+        print (f"App deploy command : {app_deploy_cmd}")
+        stdin, stdout, stderr = ssh.exec_command (app_deploy_cmd)
         stdout.channel.recv_exit_status()
+#        output = stdout.read().decode()
+#        error_output = stderr.read().decode()
+#        print(output, error_output)
         print(f"Completed deploying {app_name} at {public_ip} in {path}...")
     
     except Exception as e:
@@ -220,3 +225,6 @@ def deploy_gatekeeper_app ():
         public_ips.append(instance['PublicIP'])
 
     setup_non_db_deployment ("gatekeeper", "gatekeeper_app.py", public_ips[0], instance_ids[0])
+
+if __name__ == "__main__":
+    deploy_trusted_host_app ()
