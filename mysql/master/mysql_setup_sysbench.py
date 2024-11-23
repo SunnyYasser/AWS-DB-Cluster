@@ -87,6 +87,14 @@ def run_sysbench():
         "--mysql-db=sakila cleanup"
     )
     print("Sysbench benchmark completed and cleaned up.")
+    
+    # mark script ran successfully
+    run_shell_command(
+        "touch mysql_setup_sysbench.success"
+    )
+    print("script ran successfully")
+    
+
 
 # Main function
 def main():

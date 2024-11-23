@@ -1,0 +1,8 @@
+[
+    {
+        "Name": "proxy_manager_node",
+        "InstanceID": "i-08c65af572c677d7a",
+        "PublicDNS": "ec2-54-161-73-217.compute-1.amazonaws.com",
+        "PublicIP": "54.161.73.217"
+    }
+]

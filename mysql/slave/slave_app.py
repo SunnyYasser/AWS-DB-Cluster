@@ -58,7 +58,7 @@ def write_data():
         connection.commit()
         affected_rows = cursor.rowcount
         connection.close()
-        return jsonify({"message": "Query executed successfully", "affected_rows": affected_rows}), 201
+        return jsonify({"message": "Query executed successfully", "affected_rows": affected_rows}), 200
     except mysql.connector.Error as err:
         return jsonify({"error": str(err)}), 500
 

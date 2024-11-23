@@ -1,6 +1,6 @@
 from aws_setup import create_vpc_and_subnet, create_security_groups
 from ec2_manager import create_instances, wait_for_instances
-from app_deployment import deploy_master_app, deploy_slave_apps
+from app_deployment import deploy_master_app, deploy_slave_apps, deploy_proxy_manager_app
 from create_keypair import create_keypair
 from capture_aws_credentials2 import get_aws_credentials
 import requests
@@ -61,21 +61,21 @@ def main():
     
     # Launch EC2 instances
     mysql_instances = create_instances(ec2, constants.MYSQL_NODE_TYPE, constants.MYSQL_NODE_COUNT, subnet, mysql_sg, 'MySQLNodes', keypair)
-    #orchestrator_instance_list = create_instances(ec2, constants.CLUSTER2_TYPE, constants.CLUSTER2_COUNT, subnet, lb_sg, 'Orchestrator', keypair)
-    #orchestrator_instance = orchestrator_instance_list[0]
+    proxy_mgr_instance = create_instances(ec2, constants.PROXY_MANAGER_NODE_TYPE, constants.PROXY_MANAGER_NODE_COUNT, subnet, mysql_sg, 'ProxyManagerNode', keypair)
     
     time.sleep(60)
 
     instance_data = []
+    proxy_mgr_data = []
  
     for i, instance in enumerate(mysql_instances, start=1):
         instance.wait_until_running()
         instance.load()
         
-        if i < 3:
-            instance_name = f'mysql_read_node_{i}'
+        if i == 1:
+            instance_name = f'mysql_master_node'
         else:
-            instance_name = f'mysql_write_node'
+            instance_name = f'mysql_slave_node'
 
         instance.create_tags(Tags=[{'Key': 'Name', 'Value': instance_name}])
  
@@ -88,12 +88,32 @@ def main():
 
         instance_data.append(instance_info)
     
+    for i, instance in enumerate(proxy_mgr_instance, start=1):
+        instance.wait_until_running()
+        instance.load()
+        
+        instance_name = f'proxy_manager_node'
+
+        instance.create_tags(Tags=[{'Key': 'Name', 'Value': instance_name}])
+ 
+        instance_info = {
+            'Name': instance_name,
+            'InstanceID': instance.id,
+            'PublicDNS': instance.public_dns_name,
+            'PublicIP': instance.public_ip_address
+        }
+
+        proxy_mgr_data.append(instance_info)
     
-    save_json (instance_data, "instance_details.json")
-    print("Instance details saved to instance_details.json")
+    
+    save_json (instance_data, "../mysql/master/instance_details.json")
+    save_json (instance_data, "../mysql/proxy_manager/instance_details.json")
+    save_json (proxy_mgr_data, "proxy_manager_details.json")
+    print("Instance details saved to json files")
     
     deploy_master_app ()
     deploy_slave_apps ()
+    deploy_proxy_manager_app ()
 
 if __name__ == "__main__":
     main()

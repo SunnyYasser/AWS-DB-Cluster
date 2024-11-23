@@ -1,0 +1,14 @@
+[
+    {
+        "Name": "mysql_master_node",
+        "InstanceID": "i-05d466ff3c1382ae9",
+        "PublicDNS": "ec2-3-91-148-27.compute-1.amazonaws.com",
+        "PublicIP": "3.91.148.27"
+    },
+    {
+        "Name": "mysql_slave_node",
+        "InstanceID": "i-0e5a340791207ad79",
+        "PublicDNS": "ec2-52-23-241-162.compute-1.amazonaws.com",
+        "PublicIP": "52.23.241.162"
+    }
+]
