@@ -1,7 +1,5 @@
+import json
 import requests
-
-# Base URL of the Flask app
-BASE_URL = "http://18.232.155.197:80/process"
 
 # Authentication credentials
 USERNAME = "sysbench_user"
@@ -16,6 +14,19 @@ QUERIES = {
 
 # Function to make a request to the Flask app
 def make_request(query, mode):
+    
+    with open('gatekeeper_details.json', 'r') as file:
+         instance_details = json.load(file)
+    
+    instance_ids = []
+    public_ips = []
+    for instance in instance_details:
+            instance_ids.append(instance['InstanceID'])
+            public_ips.append(instance['PublicIP'])
+    
+    # Base URL of the Flask app
+    BASE_URL = f"http://{public_ips[0]}:80/process"
+
     headers = {
         "username": USERNAME,
         "password": PASSWORD

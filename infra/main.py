@@ -56,13 +56,13 @@ def main():
 
     # Set up VPC, subnet, and security groups
     vpc, vpc_id, subnet = create_vpc_and_subnet(ec2_client, ec2)
-    mysql_sg = create_security_groups(ec2_client, vpc_id, my_ip_cidr)
+    gatekeeper_sg, trusted_host_sg, proxy_manager_sg, mysql_sg = create_security_groups (ec2_client, vpc_id, my_ip_cidr)
     
     # Launch EC2 instances
     mysql_instances = create_instances(ec2, constants.MYSQL_NODE_TYPE, constants.MYSQL_NODE_COUNT, subnet, mysql_sg, 'MySQLNodes', keypair)
-    proxy_mgr_instance = create_instances(ec2, constants.PROXY_MANAGER_NODE_TYPE, constants.PROXY_MANAGER_NODE_COUNT, subnet, mysql_sg, 'ProxyManagerNode', keypair)
-    gatekeeper_instance = create_instances(ec2, constants.GATEKEEPER_NODE_TYPE, constants.GATEKEEPER_NODE_COUNT, subnet, mysql_sg, 'GateKeeperNode', keypair)
-    trusted_host_instance = create_instances(ec2, constants.TRUSTED_HOST_NODE_TYPE, constants.TRUSTED_HOST_NODE_COUNT, subnet, mysql_sg, 'TrustedHostNode', keypair)
+    proxy_mgr_instance = create_instances(ec2, constants.PROXY_MANAGER_NODE_TYPE, constants.PROXY_MANAGER_NODE_COUNT, subnet, proxy_manager_sg, 'ProxyManagerNode', keypair)
+    trusted_host_instance = create_instances(ec2, constants.TRUSTED_HOST_NODE_TYPE, constants.TRUSTED_HOST_NODE_COUNT, subnet, trusted_host_sg, 'TrustedHostNode', keypair)
+    gatekeeper_instance = create_instances(ec2, constants.GATEKEEPER_NODE_TYPE, constants.GATEKEEPER_NODE_COUNT, subnet, gatekeeper_sg, 'GateKeeperNode', keypair)
     
     time.sleep(60)
 

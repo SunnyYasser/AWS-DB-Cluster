@@ -1,14 +1,14 @@
 [
     {
         "Name": "mysql_master_node",
-        "InstanceID": "i-0ba9eb92cb199b463",
-        "PublicDNS": "ec2-52-2-121-239.compute-1.amazonaws.com",
-        "PublicIP": "52.2.121.239"
+        "InstanceID": "i-049b55e4ba4172b92",
+        "PublicDNS": "ec2-34-228-56-34.compute-1.amazonaws.com",
+        "PublicIP": "34.228.56.34"
     },
     {
         "Name": "mysql_slave_node",
-        "InstanceID": "i-0a8495d217b8e68c0",
-        "PublicDNS": "ec2-3-90-254-145.compute-1.amazonaws.com",
-        "PublicIP": "3.90.254.145"
+        "InstanceID": "i-0bfcbcfedf555124c",
+        "PublicDNS": "ec2-54-237-193-251.compute-1.amazonaws.com",
+        "PublicIP": "54.237.193.251"
     }
 ]

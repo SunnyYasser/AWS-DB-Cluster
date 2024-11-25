@@ -80,13 +80,10 @@ def setup_non_db_deployment (path, app_name, public_ip, instance_id):
         upload_directory (ssh, path)
         print(f"Completed uploading files for {public_ip} in {path}...")
         
-        app_deploy_cmd = f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level info &"
+        app_deploy_cmd = f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level debug --access-logfile access.log --error-logfile error.log &"
         print (f"App deploy command : {app_deploy_cmd}")
         stdin, stdout, stderr = ssh.exec_command (app_deploy_cmd)
         stdout.channel.recv_exit_status()
-#        output = stdout.read().decode()
-#        error_output = stderr.read().decode()
-#        print(output, error_output)
         print(f"Completed deploying {app_name} at {public_ip} in {path}...")
     
     except Exception as e:
@@ -131,7 +128,8 @@ def setup_deployment (path, app_name, public_ip, instance_id):
         print(f"Completed installing mysql and running sysbench on sakila")
         print(stdout.read().decode())
 
-        stdin, stdout, stderr = ssh.exec_command (f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level info &")
+        app_deploy_cmd = f"sudo gunicorn {app_name.split('/')[-1].split('.')[0]}:app -w 4 --bind 0.0.0.0:80 --log-level debug --access-logfile access.log --error-logfile error.log &"
+        stdin, stdout, stderr = ssh.exec_command (app_deploy_cmd)
         stdout.channel.recv_exit_status()
         print(f"Completed deploying {app_name} at {public_ip} in {path}...")
     
