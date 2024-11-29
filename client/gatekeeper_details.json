@@ -1,8 +1,8 @@
 [
     {
         "Name": "gatekeeper_node",
-        "InstanceID": "i-0f5d9516b98fd7ea4",
-        "PublicDNS": "ec2-18-232-155-197.compute-1.amazonaws.com",
-        "PublicIP": "18.232.155.197"
+        "InstanceID": "i-0041e5fa3a53af9ed",
+        "PublicDNS": "ec2-3-82-24-223.compute-1.amazonaws.com",
+        "PublicIP": "3.82.24.223"
     }
 ]

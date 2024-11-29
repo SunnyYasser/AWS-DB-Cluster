@@ -57,6 +57,6 @@ def write_data():
         return jsonify({"error": str(err)}), 500
 
 if __name__ == "__main__":
-    port = 5001
+    port = 80
     app.run(host="0.0.0.0", port=port)
 
